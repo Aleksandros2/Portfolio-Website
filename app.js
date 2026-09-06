@@ -300,11 +300,6 @@ const openSourceList = document.getElementById('open-source-list');
 const currentWorkTriggers = document.querySelectorAll('[data-current-work]');
 const openSourceMergeCountEl = document.getElementById('github-oss-merges-value');
 const techGrid = document.getElementById('tech-grid');
-const focusTabs = document.querySelectorAll('.focus-tab');
-const focusTitle = document.getElementById('focus-title');
-const focusText = document.getElementById('focus-text');
-const focusList = document.getElementById('focus-list');
-const focusStatus = document.getElementById('focus-status');
 const languageButtons = document.querySelectorAll('.lang-btn');
 const languageMenuButton = document.getElementById('language-menu-button');
 const languageMenu = document.getElementById('language-menu');
@@ -377,7 +372,6 @@ i18nElements.forEach((element) => {
 
 let activeDictionary = {};
 let currentLanguageCode = 'de';
-let currentFocusKey = 'web';
 let activeProjectTitle = '';
 const embeddedDictionaries = {
   de: {
@@ -2194,65 +2188,6 @@ const renderTechStack = () => {
   });
 };
 
-const focusDefinitions = () => ({
-  web: {
-    title: t('focus.web.title', 'Web'),
-    text: t('focus.web.text', 'Weboberflächen für Lernprojekte, Dashboards und Portfolio-Projekte.'),
-    points: tArray('focus.web.points', ['HTML/CSS', 'JavaScript', 'React/Vite']),
-    status: t('focus.web.status', 'Praxis: PathLab, SortLab, VSW')
-  },
-  backend: {
-    title: t('focus.backend.title', 'Backend'),
-    text: t('focus.backend.text', 'Kleine APIs und lokale Services mit klarer Datenlogik.'),
-    points: tArray('focus.backend.points', ['FastAPI', 'pytest', 'SQLite/JSON']),
-    status: t('focus.backend.status', 'Praxis: VSW, lokale Tools')
-  },
-  cloud: {
-    title: t('focus.cloud.title', 'Tools'),
-    text: t('focus.cloud.text', 'Projektarbeit mit Versionskontrolle, einfachen Workflows und lokalen Setups.'),
-    points: tArray('focus.cloud.points', ['Git und GitHub', 'Docker-Grundlagen']),
-    status: t('focus.cloud.status', 'Praxis: Tests und Builds')
-  },
-  automation: {
-    title: t('focus.automation.title', 'Automatisierung'),
-    text: t('focus.automation.text', 'Skripte für lokale Abläufe, Starts und einfache wiederkehrende Aufgaben.'),
-    points: tArray('focus.automation.points', ['PowerShell', 'CLI-Tools', 'lokale Helfer']),
-    status: t('focus.automation.status', 'Praxis: Windows-Tools')
-  }
-});
-
-const activateFocus = (focusKey) => {
-  if (!focusTitle || !focusText || !focusList || !focusStatus) return;
-  const allFocus = focusDefinitions();
-  const focus = allFocus[focusKey];
-  if (!focus) return;
-
-  currentFocusKey = focusKey;
-
-  focusTabs.forEach((button) => {
-    const active = button.dataset.focus === focusKey;
-    button.classList.toggle('is-active', active);
-    button.setAttribute('aria-selected', String(active));
-  });
-
-  focusTitle.textContent = focus.title;
-  focusText.textContent = focus.text;
-  focusStatus.textContent = focus.status;
-  focusList.innerHTML = '';
-
-  focus.points.forEach((point) => {
-    const item = document.createElement('li');
-    item.textContent = point;
-    focusList.append(item);
-  });
-};
-
-focusTabs.forEach((button) => {
-  button.addEventListener('click', () => {
-    activateFocus(button.dataset.focus);
-  });
-});
-
 const activateTab = (tabName) => {
   tabs.forEach((tab) => {
     const active = tab.dataset.tab === tabName;
@@ -2473,7 +2408,6 @@ const setLanguageMenuOpen = (isOpen) => {
 
 const refreshDynamicTexts = () => {
   refreshCurrentWorkTriggers();
-  activateFocus(currentFocusKey);
   renderProjectExplorer();
   renderCollection(portfolioData.certificates, certificatesGrid, 'certificates');
   renderOpenSourceContributions();
